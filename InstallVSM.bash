@@ -89,9 +89,12 @@ if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>
         echo ""
         echo ""
         sudo apt install libncurses5
+	echo ""
+	echo ""
         echo -e "Instalado"
         echo -e "\033[32m[OK]\033[0m"
         echo ""
+	echo ""
         ;;
       n|N ) ;;
       * ) echo -e "Opção inválida. O pacote libncurses5 não será instalado.";;
@@ -109,8 +112,11 @@ echo -e "${LINUX_VERSION} \033[32m[OK]\033[0m"
     echo ""
 
     sudo apt install libncurses5
+    echo ""
+    echo ""
     echo -e "Instalado"
     echo -e "\033[32m[OK]\033[0m"
+    echo ""
     echo ""
 
   fi
@@ -127,9 +133,12 @@ echo -e "$Versao LINUX: \033[31m[FAIL]\033[0m"
         echo ""
         echo ""
         sudo apt install libncurses5
+	echo ""
+	echo ""
         echo -e "Instalado"
         echo -e "\033[32m[OK]\033[0m"
         echo ""
+	echo ""
         ;;
       n|N ) ;;
       * ) echo -e "Opção inválida. O pacote libncurses5 não será instalado.";;
