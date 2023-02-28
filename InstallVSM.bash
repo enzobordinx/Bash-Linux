@@ -93,6 +93,7 @@ echo -e "Arquitetura: \033[31m[FAIL]\033[0m"
   echo ""
   echo ""
 
+
 else
   echo "Arquitetura do linux esta dentro do padrao."
 
