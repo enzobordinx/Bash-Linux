@@ -1,14 +1,9 @@
 #!/bin/bash
 
 clear
-
-echo"'_________________________         _____'"
-echo"' \_   _____/\______   \   \      /  _  \'"
-echo"'  |    __)_  |       _/   /     /  /_\  \'"
-echo"'  |        \ |    |   \  /     /    |    \'"
-echo"' /_______  / |____|_  / /_____/____|__  /'"
-echo"'         \/         \/              \/ ENZO VSM'"
-echo""
+sudo apt install figlet
+figlet VSM
+figlet ENZO XAVIER
 
 function progressBar {
     local duration=${1}
