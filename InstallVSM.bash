@@ -96,7 +96,6 @@ if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>
       n|N ) ;;
       * ) echo -e "Opção inválida. O pacote libncurses5 não será instalado.";;
     esac
-  fi
 
 
 echo -e "$Versao do linux: ${LINUX_VERSION}"
@@ -135,7 +134,7 @@ echo -e "$Versao LINUX: \033[31m[FAIL]\033[0m"
       n|N ) ;;
       * ) echo -e "Opção inválida. O pacote libncurses5 não será instalado.";;
     esac
-  fi
+
   echo ""
 
 fi
