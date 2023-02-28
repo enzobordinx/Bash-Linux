@@ -4,6 +4,10 @@ clear
 sudo apt install figlet
 figlet VSM
 figlet ENZO XAVIER
+echo""
+echo""
+sleep 2
+
 
 function progressBar {
     local duration=${1}
@@ -297,13 +301,11 @@ echo -e "\e[31m$1\e[0m"
 
 clear
 
-echo"'_________________________         _____'"
-echo"' \_   _____/\______   \   \      /  _  \'"
-echo"'  |    __)_  |       _/   /     /  /_\  \'"
-echo"'  |        \ |    |   \  /     /    |    \'"
-echo"' /_______  / |____|_  / /_____/____|__  /'"
-echo"'         \/         \/              \/ ENZO VSM'"
+figlet VSM
+figlet ENZO XAVIER
 echo""
+echo""
+sleep 2
 
 #Flash progressBar
 progressBar 2
