@@ -50,6 +50,34 @@ echo""
 clear
 
 
+# Checks if the user already has an MYSQL
+function check_mysql {
+    echo "Checando se o servidor possui processo do MYSQL e pasta..."
+
+    # Check for MySQL process
+    if pgrep -x "mysqld" >/dev/null; then
+        echo -e "\033[0;31mMySQL Serviço encontrado.\033[0m"
+		echo ""
+		echo ""
+        exit 1
+    fi
+
+    # Check for MySQL folder
+    if [ -d "/usr/local/mysql" ]; then
+        echo -e "\033[0;31mMySQL pasta encontrada.\033[0m"
+		echo ""
+		echo ""
+        exit 1
+    fi
+
+    # If MySQL process and folder not found
+    echo -e "\033[0;32mServiço MySQL e pasta não encontrado.\033[0m"
+}
+
+check_mysql
+echo ""
+echo ""
+
 # Validate Linux version
 LINUX_VERSION=$(cat /etc/issue | awk '{print $2}')
 if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>=18.04|20.04|20.10|21.04)$) ]]; then
@@ -92,7 +120,6 @@ echo -e "Arquitetura: \033[31m[FAIL]\033[0m"
 
   echo ""
   echo ""
-
 
 else
   echo "Arquitetura do linux esta dentro do padrao."
@@ -243,8 +270,11 @@ echo"' /_______  / |____|_  / /_____/____|__  /'"
 echo"'         \/         \/              \/ ENZO VSM'"
 echo""
 
+#Flash progressBar
 progressBar 2
 clear
+
+
 
 #Create backupvsm directory in the home directory
 if [ ! -d /home/backupvsm ]; then
