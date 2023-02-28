@@ -94,8 +94,8 @@ else
 fi
 
 # Update my.cnf
-sudo sed -i "s/^max_connections.*$/max_connections = $max_connections/" /etc/mysql/my.cnf
-sudo sed -i "s/^innodb_buffer_pool_size.*$/innodb_buffer_pool_size = ${memory}M/" /etc/mysql/my.cnf
+sudo sed -i "s/^max_connections*$/max_connections = $max_connections/" /etc/mysql/my.cnf
+sudo sed -i "s/^innodb_buffer_pool_size*$/innodb_buffer_pool_size = ${memory}M/" /etc/mysql/my.cnf
 
 echo -e "\e[32m[INFO]\e[39m Configurações realizadas com sucesso:"
 echo -e "\e[32m[INFO]\e[39m   - max_connections definido como $max_connections"
