@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 clear
 
 echo"'_________________________         _____'"
@@ -50,17 +49,19 @@ echo""
 echo""
 clear
 
+
 # Validate Linux version
 LINUX_VERSION=$(cat /etc/issue | awk '{print $2}')
-if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(18\.04|20\.04|20\.10|21\.04)$) ]]; then
+if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>=18.04|20.04|20.10|21.04)$) ]]; then
   echo -e "Linux está no recomendado."
+
 
 echo -e "$Versao do linux: ${LINUX_VERSION}"
 echo -e "${LINUX_VERSION} \033[32m[OK]\033[0m"
 
   echo ""
   echo ""
-  if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(20\.04|20\.10|21\.04)$) ]]; then
+  if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>=20.04|20.10|21.04)$) ]]; then
     echo -e "Instalando libncurses5... [WAIT]"
     echo ""
     echo ""
@@ -158,34 +159,54 @@ fi
 LINUX_STORAGE=$(cat /sys/block/sda/queue/rotational)
 if [[ $LINUX_STORAGE -eq 0 ]]; then
   echo "O disco e SSD."
-echo -e "\033[32m[OK]\033[0m"
-echo ""
+echo -e "Status: \033[32m[OK]\033[0m"
+echo "DISCO: ${LINUX_STORAGE}"
 echo ""
 
 else
   echo "O disco e HD."
-echo -e "\033[33m[LENTO]\033[0m"
-echo ""
+echo -e "Status: \033[33m[LENTO]\033[0m"
+echo "DISCO: ${LINUX_STORAGE}"
 echo ""
 
 fi
 
 # Check if storage has at least 100GB free space
-echo "Validando espaco em disco"
+#echo "Validando espaco em disco"
+#free_space=$(df -h / | awk '/^\/dev/{print $4}')
+#if [[ $(echo $free_space | cut -d'G' -f1) -ge 100 ]]; then
+
+#    echo "Livre: ${free_space}"
+#    echo -e "Disco: [\033[0;32mOK\033[0m]"
+
+#else
+
+#    echo "Livre: ${free_space} (minimum requirement: 100GB)"
+#    echo -e "Disco: [\033[0;31mFAIL\033[0m]"
+
+#echo ""
+#echo ""
+#fi
+
+# Ask user for backup size
+read -p "Qual é o tamanho do backup em GB? " backup_size
+
+# Calculate required free space
+required_space=$(echo "$backup_size * 2.4" | bc)
+required_space="${required_space%.*}" # Round down to nearest integer
+
+# Check if storage has enough free space
+echo "Validating disk space"
 free_space=$(df -h / | awk '/^\/dev/{print $4}')
-if [[ $(echo $free_space | cut -d'G' -f1) -ge 100 ]]; then
-
-    echo "Livre: ${free_space}"
-    echo -e "Disco: [\033[0;32mOK\033[0m]"
-
+if [[ $(echo $free_space | cut -d'G' -f1) -ge $required_space ]]; then
+    echo "Free space: ${free_space}"
+    echo -e "Disk: [\033[0;32mOK\033[0m]"
 else
-
-    echo "Livre: ${free_space} (minimum requirement: 100GB)"
-    echo -e "Disco: [\033[0;31mFAIL\033[0m]"
-
-echo ""
-echo ""
+    echo "Free space: ${free_space} (minimum requirement: ${required_space}GB)"
+    echo -e "Disk: [\033[0;31mFAIL\033[0m]"
 fi
+echo ""
+echo ""
 
 # Prompt user to update and upgrade
 read -p "Deseja rodar o upgrade no linux? (Y/N) " choice
@@ -195,3 +216,18 @@ case "$choice" in
   * ) echo "[Invalid choice.] Pulando  update and upgrade.";;
 esac
 
+clear
+#Echo function for success messages in green
+success_echo() {
+echo -e "\e[32m$1\e[0m"
+}
+
+#Echo function for warning messages in yellow
+warning_echo() {
+echo -e "\e[33m$1\e[0m"
+}
+
+#Echo function for error messages in red
+error_echo() {
+echo -e "\e[31m$1\e[0m"
+}
