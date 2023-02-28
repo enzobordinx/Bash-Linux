@@ -78,49 +78,11 @@ check_mysql
 echo ""
 echo ""
 
-# Validate Linux version
-#LINUX_VERSION=$(cat /etc/issue | awk '{print $2}')
-#if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>=18.04|20.04|20.10|21.04)$) ]]; then
- # echo -e "Linux está no recomendado."
-
-
-#echo -e "$Versao do linux: ${LINUX_VERSION}"
-#echo -e "${LINUX_VERSION} \033[32m[OK]\033[0m"
-
- # echo ""
-  #echo ""
- # if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>=20.04|20.10|21.04)$) ]]; then
-  #  echo -e "Instalando libncurses5... [WAIT]"
-  #  echo ""
-  #  echo ""
-
- #   sudo apt install libncurses5
- #   echo -e "Instalado"
- #   echo -e "\033[32m[OK]\033[0m"
- #   echo ""
-
- ## fi
-#else
- # echo -e "Versão do linux fora do padrao. Por favor, instale Ubuntu 18.04 LTS or higher."
-
-#echo -e "$Versao LINUX: ${LINUX_VERSION}"
-#echo -e "$Versao LINUX: \033[31m[FAIL]\033[0m"
- # echo ""
-#  echo ""
-
-#fi
-
-# Validate Linux version
+ #Validate Linux version
 LINUX_VERSION=$(cat /etc/issue | awk '{print $2}')
 if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>=18.04|20.04|20.10|21.04)$) ]]; then
   echo -e "Linux está no recomendado."
-  echo -e "Versão do linux: ${LINUX_VERSION}"
-  echo -e "${LINUX_VERSION} \033[32m[OK]\033[0m"
-  echo ""
-  echo ""
-
-  if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>=20.04|20.10|21.04)$) ]]; then
-    read -p "Deseja instalar o pacote libncurses5? (y/n) " choice
+  read -p "Deseja instalar o pacote libncurses5? (y/n) " choice
     case "$choice" in 
       y|Y )
         echo -e "Instalando libncurses5... [WAIT]"
@@ -136,13 +98,48 @@ if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>
     esac
   fi
 
+
+echo -e "$Versao do linux: ${LINUX_VERSION}"
+echo -e "${LINUX_VERSION} \033[32m[OK]\033[0m"
+
+  echo ""
+  echo ""
+  if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>=20.04|20.10|21.04)$) ]]; then
+    echo -e "Instalando libncurses5... [WAIT]"
+    echo ""
+    echo ""
+
+    sudo apt install libncurses5
+    echo -e "Instalado"
+    echo -e "\033[32m[OK]\033[0m"
+    echo ""
+
+  fi
 else
-  echo -e "Versão do linux fora do padrão. Por favor, instale Ubuntu 18.04 LTS ou superior."
-  echo -e "Versão do linux: ${LINUX_VERSION}"
-  echo -e "${LINUX_VERSION} \033[31m[FAIL]\033[0m"
+  echo -e "Versão do linux fora do padrao. Por favor, instale Ubuntu 18.04 LTS or higher."
+
+echo -e "$Versao LINUX: ${LINUX_VERSION}"
+echo -e "$Versao LINUX: \033[31m[FAIL]\033[0m"
   echo ""
+  read -p "Deseja instalar o pacote libncurses5? (y/n) " choice
+    case "$choice" in 
+      y|Y )
+        echo -e "Instalando libncurses5... [WAIT]"
+        echo ""
+        echo ""
+        sudo apt install libncurses5
+        echo -e "Instalado"
+        echo -e "\033[32m[OK]\033[0m"
+        echo ""
+        ;;
+      n|N ) ;;
+      * ) echo -e "Opção inválida. O pacote libncurses5 não será instalado.";;
+    esac
+  fi
   echo ""
+
 fi
+
 
 
 # Validate Linux architecture
