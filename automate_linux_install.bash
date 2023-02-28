@@ -83,7 +83,7 @@ memory=$(echo "scale=0; $total_ram * 0.6 / 1024 / 1024" | bc)
 echo""
 
 # Get server ID
-server_id=$(grep -oP "(?<=^server-id = )\d+" /etc/mysql/my.cnf)
+server_id=$(grep -oP "(?<=^server-id = )\d+" /etc/my.cnf)
 echo""
 
 # Determine max connections based on server ID
@@ -94,8 +94,8 @@ else
 fi
 
 # Update my.cnf
-sudo sed -i "s/^max_connections*$/max_connections = $max_connections/" /etc/mysql/my.cnf
-sudo sed -i "s/^innodb_buffer_pool_size*$/innodb_buffer_pool_size = ${memory}M/" /etc/mysql/my.cnf
+sudo sed -i "s/^max_connections.*$/max_connections = $max_connections/" /etc/my.cnf
+sudo sed -i "s/^innodb_buffer_pool_size.*$/innodb_buffer_pool_size = ${memory}M/" /etc/my.cnf
 
 echo -e "\e[32m[INFO]\e[39m Configurações realizadas com sucesso:"
 echo -e "\e[32m[INFO]\e[39m   - max_connections definido como $max_connections"
