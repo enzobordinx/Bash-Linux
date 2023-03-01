@@ -42,7 +42,7 @@ function progressBar {
     printf "\r${block:0:$totalBlocks}${empty:0:0} 100%%\n"
 }
 
-# Call the progress bar function with a duration of 4 seconds
+# Call the progress bar function with a duration
 progressBar 1
 echo""
 echo""
@@ -301,8 +301,8 @@ echo -e "\e[31m$1\e[0m"
 
 clear
 
+figlet RAM: ${LINUX_RAM/1024}GB
 figlet VSM
-figlet ENZO XAVIER
 echo""
 echo""
 sleep 2
