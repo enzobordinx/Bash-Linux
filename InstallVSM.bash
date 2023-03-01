@@ -1,8 +1,9 @@
 #!/bin/bash
 
 clear
+LINUX_VERSION=$(cat /etc/issue | awk '{print $2}')
 sudo apt install figlet
-figlet VSM
+figlet $LINUX_VERSION
 figlet ENZO XAVIER
 echo""
 echo""
@@ -301,7 +302,8 @@ echo -e "\e[31m$1\e[0m"
 
 clear
 
-figlet RAM: ${LINUX_RAM/1024}MB
+free_space=$(df -h / | awk '/^\/dev/{print $4}')
+figlet DISCO LIVRE: $free_space
 figlet VSM
 echo""
 echo""
