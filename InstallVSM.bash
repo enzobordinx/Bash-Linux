@@ -301,7 +301,7 @@ echo -e "\e[31m$1\e[0m"
 
 clear
 
-figlet RAM: ${LINUX_RAM/1024}GB
+figlet RAM: ${LINUX_RAM/1024}MB
 figlet VSM
 echo""
 echo""
