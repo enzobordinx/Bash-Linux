@@ -88,7 +88,7 @@ if [[ $LINUX_VERSION == "Ubuntu" && ($(cat /etc/issue | awk '{print $3}') =~ ^(>
         echo -e "Instalando libncurses5... [WAIT]"
         echo ""
         echo ""
-        sudo apt install libncurses5
+        sudo apt install libncurses5 -y
 	echo ""
 	echo ""
         echo -e "Instalado"
@@ -111,7 +111,7 @@ echo -e "${LINUX_VERSION} \033[32m[OK]\033[0m"
     echo ""
     echo ""
 
-    sudo apt install libncurses5
+    sudo apt install libncurses5 -y
     echo ""
     echo ""
     echo -e "Instalado"
@@ -132,7 +132,7 @@ echo -e "$Versao LINUX: \033[31m[FAIL]\033[0m"
         echo -e "Instalando libncurses5... [WAIT]"
         echo ""
         echo ""
-        sudo apt install libncurses5
+        sudo apt install libncurses5 -y
 	echo ""
 	echo ""
         echo -e "Instalado"
@@ -279,7 +279,7 @@ echo ""
 # Prompt user to update and upgrade
 read -p "Deseja rodar o upgrade no linux? (Y/N) " choice
 case "$choice" in
-  y|Y ) sudo apt-get update && sudo apt-get upgrade;;
+  y|Y ) sudo apt-get update && sudo apt-get upgrade -y;;
   n|N ) echo -e "\033[33mPulando UPDATE & UPGRADE\033[0m";;
   * ) echo "[Invalid choice.] Pulando  update and upgrade.";;
 esac
