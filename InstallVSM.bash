@@ -334,7 +334,6 @@ success_echo "Porta 3307 adicionada no MY.CNF"
 echo""
 echo""
 
-../etc/init.d/mysql restar
 warning_echo "Reiniciando MYSQL..."
 echo""
 echo""
