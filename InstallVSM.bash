@@ -120,23 +120,15 @@ fi
 # Validate Linux architecture
 LINUX_ARCH=$(uname -m)
 if [[ $LINUX_ARCH != "x86_64" ]]; then
+  echo -e "Arquitetura: ${LINUX_ARCH}"
+  echo -e "Arquitetura: \033[31m[FAIL]\033[0m"
   echo "Arquitetura do linux incorreta. Please install a 64-bit version of Ubuntu."
-
-echo -e "Arquitetura: ${LINUX_ARCH}"
-echo -e "Arquitetura: \033[31m[FAIL]\033[0m"
-
   echo ""
-  echo ""
-
 else
+  echo -e "Arquitetura: ${LINUX_ARCH}"
+  echo -e "Arquitetura: \033[32m[OK]\033[0m"
   echo "Arquitetura do linux esta dentro do padrao."
-
-echo -e "Arquitetura: ${LINUX_ARCH}"
-echo -e "Arquitetura: \033[32m[OK]\033[0m"
-
- echo ""
   echo ""
-
 fi
 
 # Validate RAM
@@ -190,38 +182,21 @@ fi
 
 
 
+#!/bin/bash
+
 # Validate if it's HD or SSD
 LINUX_STORAGE=$(cat /sys/block/sda/queue/rotational)
 if [[ $LINUX_STORAGE -eq 0 ]]; then
+  echo -e "Status: \033[32m[OK]\033[0m"
+  echo "DISCO: ${LINUX_STORAGE}"
   echo "O disco e SSD."
-echo -e "Status: \033[32m[OK]\033[0m"
-echo "DISCO: ${LINUX_STORAGE}"
-echo ""
-
+  echo ""
 else
+  echo -e "Status: \033[33m[LENTO]\033[0m"
+  echo "DISCO: ${LINUX_STORAGE}"
   echo "O disco e HD."
-echo -e "Status: \033[33m[LENTO]\033[0m"
-echo "DISCO: ${LINUX_STORAGE}"
-echo ""
-
+  echo ""
 fi
-
-# Check if storage has at least 100GB free space
-#echo "Validando espaco em disco"
-#free_space=$(df -h / | awk '/^\/dev/{print $4}')
-#if [[ $(echo $free_space | cut -d'G' -f1) -ge 100 ]]; then
-
-#    echo "Livre: ${free_space}"
-#    echo -e "Disco: [\033[0;32mOK\033[0m]"
-
-#else
-
-#    echo "Livre: ${free_space} (minimum requirement: 100GB)"
-#    echo -e "Disco: [\033[0;31mFAIL\033[0m]"
-
-#echo ""
-#echo ""
-#fi
 
 # Ask user for backup size
 read -p "Qual é o tamanho do backup em GB? " backup_size
@@ -248,23 +223,24 @@ read -p "Deseja rodar o upgrade no linux? (Y/N) " choice
 case "$choice" in
   y|Y ) sudo apt-get update && sudo apt-get upgrade -y;;
   n|N ) echo -e "\033[33mPulando UPDATE & UPGRADE\033[0m";;
-  * ) echo "[Invalid choice.] Pulando  update and upgrade.";;
+  * ) echo "[Invalid choice.] Pulando update and upgrade.";;
 esac
 
 clear
-#Echo function for success messages in green
+
+# Echo function for success messages in green
 success_echo() {
-echo -e "\e[32m$1\e[0m"
+  echo -e "\e[32m$1\e[0m"
 }
 
-#Echo function for warning messages in yellow
+# Echo function for warning messages in yellow
 warning_echo() {
-echo -e "\e[33m$1\e[0m"
+  echo -e "\e[33m$1\e[0m"
 }
 
-#Echo function for error messages in red
+# Echo function for error messages in red
 error_echo() {
-echo -e "\e[31m$1\e[0m"
+  echo -e "\e[31m$1\e[0m"
 }
 
 clear
@@ -272,13 +248,14 @@ clear
 free_space=$(df -h / | awk '/^\/dev/{print $4}')
 figlet DISCO LIVRE: $free_space
 figlet VSM
-echo""
-echo""
+echo ""
+echo ""
 sleep 2
 
-#Flash progressBar
+# Flash progressBar
 progressBar 2
 clear
+
 
 
 
@@ -313,70 +290,83 @@ echo""
 
 fi
 
-#Make vsmInstallServidor.bash executable
-sudo chmod +x vsmInstallServidor.bash && success_echo "Permissões concedidas ao arquivo vsmInstallServidor.bash."
-echo""
-echo""
+#!/bin/bash
 
-#Ask user if they want to run vsmInstallServidor.bash
+# Functions to improve readability
+success_echo() {
+  echo -e "\033[32m$1\033[0m"
+}
+
+warning_echo() {
+  echo -e "\033[33m$1\033[0m"
+}
+
+# Make vsmInstallServidor.bash executable
+sudo chmod +x vsmInstallServidor.bash
+success_echo "Permissões concedidas ao arquivo vsmInstallServidor.bash."
+echo ""
+echo ""
+
+# Ask user if they want to run vsmInstallServidor.bash
 read -p "Deseja executar o arquivo vsmInstallServidor.bash? [S/N]: " choice
 
 if [[ $choice == [Ss] ]]; then
+  # Run vsmInstallServidor.bash
+  sudo ./vsmInstallServidor.bash
+  success_echo "Execução do arquivo vsmInstallServidor.bash concluída."
+  echo ""
+  echo ""
 
-#Run vsmInstallServidor.bash
-sudo ./vsmInstallServidor.bash && success_echo "Execução do arquivo vsmInstallServidor.bash concluída."
-echo""
-echo""
+  # Add port 3307 and restart MySQL
+  echo "port=3307" | sudo tee -a /etc/my.cnf
+  success_echo "Porta 3307 adicionada no MY.CNF"
+  echo ""
+  echo ""
 
-#Adicionar porta 3307 e reiniciar mysql
-echo "port=3307" >> /etc/my.cnf
-success_echo "Porta 3307 adicionada no MY.CNF"
-echo""
-echo""
+  warning_echo "Reiniciando MYSQL..."
+  echo ""
+  echo ""
 
-warning_echo "Reiniciando MYSQL..."
-echo""
-echo""
+  echo -e "\033[32m[INFO]\033[39m Iniciando otimização do arquivo my.cnf para usar 60% da memória do sistema..."
+  echo ""
 
-echo -e "\e[32m[INFO]\e[39m Iniciando otimização do arquivo my.cnf para usar 60% da memória do sistema..."
-echo ""
-# Get total RAM in bytes
-total_ram=$(grep MemTotal /proc/meminfo | awk '{print $2 * 1024}')
-echo ""
+  # Get total RAM in bytes
+  total_ram=$(grep MemTotal /proc/meminfo | awk '{print $2 * 1024}')
+  echo ""
 
-# Calculate 60% of RAM
-memory=$(echo "scale=0; $total_ram * 0.6 / 1024 / 1024" | bc)
-echo""
+  # Calculate 60% of RAM
+  memory=$(echo "scale=0; $total_ram * 0.6 / 1024 / 1024" | bc)
+  echo ""
 
-# Get server ID
-server_id=$(grep -oP "(?<=^server-id = )\d+" /etc/my.cnf)
-echo""
+  # Get server ID
+  server_id=$(grep -oP "(?<=^server-id = )\d+" /etc/my.cnf)
+  echo ""
 
-# Determine max connections based on server ID
-if [[ $server_id -eq 1 ]]; then
-  max_connections=1200
+  # Determine max connections based on server ID
+  if [[ $server_id -eq 1 ]]; then
+    max_connections=1200
+  else
+    max_connections=900
+  fi
+
+  # Update my.cnf
+  sudo sed -i "s/^max_connections.*$/max_connections = $max_connections/" /etc/my.cnf
+  sudo sed -i "s/^innodb_buffer_pool_size.*$/innodb_buffer_pool_size = ${memory}M/" /etc/my.cnf
+
+  echo -e "\033[32m[INFO]\033[39m Configurações realizadas com sucesso:"
+  echo -e "\033[32m[INFO]\033[39m   - max_connections definido como $max_connections"
+  echo -e "\033[32m[INFO]\033[39m   - innodb_buffer_pool_size definido como ${memory}M"
+  echo -e "\033[32m[INFO]\033[39m Reiniciando o serviço MySQL..."
+
+  # Restart MySQL service
+  sudo service mysql restart
+  echo ""
+  echo ""
+  echo -e "\033[32m[INFO]\033[39m Serviço MySQL reiniciado com sucesso!"
+
 else
-  max_connections=900
+  warning_echo "Execução do arquivo vsmInstallServidor.bash cancelada pelo usuário."
+  echo ""
+  echo ""
 fi
 
-# Update my.cnf
-sudo sed -i "s/^max_connections.*$/max_connections = $max_connections/" /etc/my.cnf
-sudo sed -i "s/^innodb_buffer_pool_size.*$/innodb_buffer_pool_size = ${memory}M/" /etc/my.cnf
-
-echo -e "\e[32m[INFO]\e[39m Configurações realizadas com sucesso:"
-echo -e "\e[32m[INFO]\e[39m   - max_connections definido como $max_connections"
-echo -e "\e[32m[INFO]\e[39m   - innodb_buffer_pool_size definido como ${memory}M"
-echo -e "\e[32m[INFO]\e[39m Reiniciando o serviço MySQL..."
-
-# Restart MySQL service
-sudo service mysql restart
-echo""
-echo""
-echo -e "\e[32m[INFO]\e[39m Serviço MySQL reiniciado com sucesso!"
-
-else
-warning_echo "Execução do arquivo vsmInstallServidor.bash cancelada pelo usuário."
-echo""
-echo""
-
-fi
